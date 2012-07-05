@@ -33,10 +33,8 @@ class EMSignUpController < UIViewController
   
   def viewWillAppear animated
     puts "EMSignUpController::viewWillAppear:#{animated}"
-    
-    bg_image = UIImage.imageNamed( "login-form" )
-    puts bg_image
-    @login_bg.setImage( bg_image )
+
+    @login_bg.setImage( UIImage.imageNamed( "login-form" ) )
     
     @email.becomeFirstResponder
   end
