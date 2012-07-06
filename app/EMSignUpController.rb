@@ -73,6 +73,11 @@ class EMSignUpController < UIViewController
     msg   = ''
     valid = true;
     
+    if @password.text.length < 6
+      msg = 'You must enter a password of at least 6 characters to sign up.'
+      valid = false
+    end
+    
     if @email.text.length == 0
       msg = 'You must enter an email address to sign up.'
       valid = false
@@ -82,11 +87,6 @@ class EMSignUpController < UIViewController
 #      msg = 'You must enter a valid email address to sign up.'
 #      valid = false
 #    end
-    
-    if @password.text.length < 6
-      msg = 'You must enter a password of at least 6 characters to sign up.'
-      valid = false
-    end
     
     if !valid
       av = UIAlertView.alloc.initWithTitle( 'Oops!', message:msg, delegate:self, cancelButtonTitle:'Ok', otherButtonTitles:nil )
@@ -98,9 +98,10 @@ class EMSignUpController < UIViewController
   
   def sign_up_user
     puts "EMSignUpController::sign_up_user"
-    extra_info = EMSignUpExtraInfoController.new.initWithNibName( 'EMSignUpExtraInfoControllerView', bundle:NSBundle.mainBundle )
+    extra_info    = NSBundle.mainBundle.loadNibNamed( 'EMSignUpExtraInfoControllerView', owner:self, options:nil ).first
     extra_info.pw = @password.text
-    self.navigationController.pushViewController( extra_info, animated:true )
+    
+    navigationController.pushViewController( extra_info, animated:true )
   end
   
 end

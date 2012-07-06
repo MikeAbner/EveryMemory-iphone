@@ -67,13 +67,13 @@ class EMSignUpExtraInfoController < UIViewController
     msg   = ''
     valid = true;
     
-    if @name.text.length == 0
-      msg = 'You must enter a name to sign up.'
+    if @password.text.length != @pw
+      msg = 'The passwords do not match.'
       valid = false
     end
     
-    if @password.text.length != pw
-      msg = 'The passwords do not match.'
+    if @name.text.length == 0
+      msg = 'You must enter a name to sign up.'
       valid = false
     end
     
