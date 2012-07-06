@@ -29,7 +29,10 @@ class EMIntroController < UIViewController
     puts "EMIntroController::loadSignup"
     
     sign_up = NSBundle.mainBundle.loadNibNamed( 'EMSignUpControllerView', owner:self, options:nil ).first
-    self.presentModalViewController( sign_up, animated:true )
+    nav = UINavigationController.alloc.initWithRootViewController( sign_up )
+    nav.setNavigationBarHidden( true, animated:false )
+    
+    self.presentModalViewController( nav, animated:true )
   end
   
   def loadApp
