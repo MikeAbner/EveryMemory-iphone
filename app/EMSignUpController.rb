@@ -98,10 +98,38 @@ class EMSignUpController < UIViewController
   
   def sign_up_user
     puts "EMSignUpController::sign_up_user"
-    extra_info    = NSBundle.mainBundle.loadNibNamed( 'EMSignUpExtraInfoControllerView', owner:self, options:nil ).first
-    extra_info.pw = @password.text
     
-    navigationController.pushViewController( extra_info, animated:true )
+    url = "http://every-memory.herokuapp.com/api/#{EMServer::API_VERSION}/user/sign_in"
+    params = { :email => @email.text, :password => @password.text }
+    
+    EMServer.get_json( url, params, self, :sign_up_success, :sign_up_failure )
+  end
+  
+  def sign_up_success request, response, json
+    puts "EMSignUpController::sign_up_success"
+
+    is_new_user = json['is_new_user']
+    user_id     = json['user_id']
+    email       = json['email']
+
+    if ( is_new_user )
+      EMUserModel.set_user_id_and_email( user_id, email )
+      
+      extra_info    = NSBundle.mainBundle.loadNibNamed( 'EMSignUpExtraInfoControllerView', owner:self, options:nil ).first
+      extra_info.pw = @password.text
+
+      navigationController.pushViewController( extra_info, animated:true )
+    else
+      
+    end
+  end
+  
+  def sign_up_failure request, response, error, json
+    puts "EMSignUpController::sign_up_failure"
+    
+    msg = "Looks like something went wrong on our end. We're sorry about that.  Please try again and let us know if it keeps happening." 
+    av  = UIAlertView.alloc.initWithTitle( 'Oops!', message:msg, delegate:self, cancelButtonTitle:'Ok', otherButtonTitles:nil )
+    av.show
   end
   
 end
